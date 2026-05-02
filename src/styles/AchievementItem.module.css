@@ -1,13 +1,19 @@
+@font-face {
+  font-family: 'Mikodacs Custom';
+  src: url('/fonts/Mikodacs.ttf') format('truetype');
+}
+
 .item {
   background: white;
   border: 2px solid #ddd;
   border-radius: 8px;
-  padding: 20px;
+  padding: 20px 100px 20px 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 15px;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
 }
 
 .item:hover {
@@ -17,7 +23,7 @@
 
 .item.completed {
   background-color: #f9f9f9;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .item.completed .name {
@@ -25,8 +31,14 @@
   color: #999;
 }
 
+.backgroundImage {
+  display: none;
+}
+
 .content {
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -39,21 +51,26 @@
 
 .name {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: 600;
   color: #333;
+  font-family: 'Pretendard Regular', sans-serif;
+  flex: 1;
+  text-align: left;
 }
 
 .badge {
   display: inline-block;
   padding: 4px 12px;
   border-radius: 20px;
-  font-size: 0.75em;
+  font-size: 0.7em;
   font-weight: 600;
   white-space: nowrap;
   text-transform: uppercase;
   color: white;
   background-color: #666;
+  font-family: 'Mikodacs Custom', sans-serif;
+  flex-shrink: 0;
 }
 
 /* Group color themes */
@@ -90,22 +107,12 @@
   background-color: #212121;
 }
 
-.details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.xp {
-  font-size: 0.95em;
-  font-weight: 600;
-  color: #4CAF50;
-}
-
 .keywords {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  position: relative;
+  z-index: 1;
 }
 
 .keyword {
@@ -113,39 +120,97 @@
   padding: 2px 8px;
   background-color: #f0f0f0;
   border-radius: 4px;
-  font-size: 0.8em;
+  font-size: 0.75em;
   color: #666;
 }
 
-.toggle {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border: 2px solid #ddd;
-  border-radius: 50%;
-  background: white;
+.cornerContainer {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  z-index: 2;
+}
+
+.xpDisplay {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #FFD700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  min-width: 40px;
+  text-align: center;
+  font-size: 0.7em;
+  z-index: 10;
+}
+
+.xpValue {
+  font-family: 'Excelsior Sans', sans-serif;
+  font-size: 0.9em;
+  font-weight: 700;
+  color: #FFD700;
+}
+
+.toggleButton {
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  background-image: url('/spider_projection_background.png');
+  background-size: cover;
+  background-position: center;
   cursor: pointer;
-  font-size: 1.5em;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
-.toggle:hover {
+.toggleButton:hover {
+  border-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.95);
+  background-image: url('/spider_projection_background.png');
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.toggleButton:active {
+  transform: scale(0.95);
+}
+
+.projectionImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.toggleButton:hover .projectionImage {
+  opacity: 1;
+}
+
+.item.completed .toggleButton {
+  background-color: rgba(75, 175, 80, 0.8);
+  background-image: url('/spider_projection_background.png');
   border-color: #4CAF50;
-  color: #4CAF50;
-  background-color: #f0fdf4;
 }
 
-.item.completed .toggle {
-  border-color: #4CAF50;
-  background-color: #4CAF50;
-  color: white;
+.item.completed .projectionImage {
+  opacity: 0.5;
+  filter: brightness(0.7);
 }
 
-.item.completed .toggle:hover {
-  background-color: #45a049;
-  border-color: #45a049;
+.item.completed .toggleButton:hover .projectionImage {
+  opacity: 0.7;
+  filter: brightness(0.8);
 }
