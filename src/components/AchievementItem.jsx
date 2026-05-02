@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import styles from '../styles/AchievementItem.module.css';
 
 export default function AchievementItem({ achievement, onToggle }) {
+  const [keywordsExpanded, setKeywordsExpanded] = useState(false);
+
   const handleToggle = () => {
     onToggle(achievement.id);
   };
@@ -19,13 +22,21 @@ export default function AchievementItem({ achievement, onToggle }) {
             {achievement.group}
           </span>
         </div>
-        <div className={styles.keywords}>
-          {achievement.keywords.map((keyword) => (
-            <span key={keyword} className={styles.keyword}>
-              {keyword}
-            </span>
-          ))}
-        </div>
+        <button
+          className={styles.keywordsToggle}
+          onClick={() => setKeywordsExpanded(!keywordsExpanded)}
+        >
+          Keywords {keywordsExpanded ? '▼' : '▶'}
+        </button>
+        {keywordsExpanded && (
+          <div className={styles.keywords}>
+            {achievement.keywords.map((keyword) => (
+              <span key={keyword} className={styles.keyword}>
+                {keyword}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className={styles.cornerContainer}>
@@ -41,7 +52,7 @@ export default function AchievementItem({ achievement, onToggle }) {
           />
           <div className={styles.xpDisplay}>
             <span className={styles.xpValue}>
-              {isHidden ? 'Lunacy' : `+${achievement.projectionRate}`}
+              +{achievement.projectionRate}
             </span>
           </div>
         </button>

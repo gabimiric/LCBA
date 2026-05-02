@@ -1,0 +1,133 @@
+.filterPanel {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 auto 30px auto;
+  max-width: 1200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+.filterSection {
+  margin-bottom: 20px;
+  overflow: visible;
+}
+
+.filterSection:last-of-type {
+  margin-bottom: 20px;
+}
+
+.filterSection h3 {
+  margin: 0 0 12px 0;
+  font-size: 1em;
+  color: #333;
+  font-weight: 600;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.filterOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filterLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.filterLabel input[type='checkbox'] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.selectInput {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 100;
+}
+
+.selectInput:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.rangeContainer {
+  display: flex;
+  gap: 16px;
+}
+
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rangeRow label {
+  font-size: 0.9em;
+  color: #666;
+  min-width: 35px;
+}
+
+.rangeInput {
+  width: 70px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.rangeInput:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.clearButton {
+  width: 100%;
+  padding: 10px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clearButton:hover {
+  background-color: #d32f2f;
+}
+
+.clearButton:active {
+  transform: scale(0.98);
+}

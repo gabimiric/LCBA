@@ -107,12 +107,31 @@
   background-color: #212121;
 }
 
+.keywordsToggle {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.keywordsToggle:hover {
+  color: #333;
+}
+
 .keywords {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   position: relative;
   z-index: 1;
+  justify-content: flex-start;
 }
 
 .keyword {

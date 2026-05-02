@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import AchievementList from './components/AchievementList'
+import FilterPanel from './components/FilterPanel'
 import achievementsData from './data/achievements.json'
 import styles from './styles/App.module.css'
 
 function App() {
   const [achievements, setAchievements] = useState([])
+  const [filteredAchievements, setFilteredAchievements] = useState([])
 
   // Load achievements and restore completed state from localStorage
   useEffect(() => {
@@ -17,6 +19,7 @@ function App() {
     }))
 
     setAchievements(loaded)
+    setFilteredAchievements(loaded)
   }, [])
 
   // Handle achievement toggle
@@ -38,13 +41,21 @@ function App() {
     })
   }
 
+  // Handle filter changes
+  const handleFilterChange = (filtered) => {
+    setFilteredAchievements(filtered)
+  }
+
   return (
     <div className={styles.app}>
       <header className={styles.header}>
         <h1>Limbus Company Achievement Tracker</h1>
         <p>Track your progress across all achievements</p>
       </header>
-      <AchievementList achievements={achievements} onToggle={handleToggleAchievement} />
+      {achievements.length > 0 && (
+        <FilterPanel achievements={achievements} onFilterChange={handleFilterChange} />
+      )}
+      <AchievementList achievements={filteredAchievements} onToggle={handleToggleAchievement} />
     </div>
   )
 }
