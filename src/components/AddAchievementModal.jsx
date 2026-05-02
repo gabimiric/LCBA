@@ -14,7 +14,7 @@ const EXAMPLE_ACHIEVEMENTS = [
   }
 ];
 
-export default function AddAchievementModal({ isOpen, onClose, onAdd, maxId }) {
+export default function AddAchievementModal({ isOpen, onClose, onAdd, maxId, darkMode }) {
   const [jsonText, setJsonText] = useState(JSON.stringify(EXAMPLE_ACHIEVEMENTS, null, 2));
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -83,7 +83,7 @@ export default function AddAchievementModal({ isOpen, onClose, onAdd, maxId }) {
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <div className={`${styles.modalContent} ${darkMode ? styles.darkMode : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Add Custom Achievements</h2>
           <button className={styles.closeButton} onClick={onClose}>

@@ -16,9 +16,20 @@
   overflow: visible;
 }
 
+.item.darkMode {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
 .item:hover {
   border-color: #999;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.item.darkMode:hover {
+  border-color: #666;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .item.completed {
@@ -26,9 +37,17 @@
   opacity: 0.85;
 }
 
+.item.darkMode.completed {
+  background-color: #1f1f1f;
+}
+
 .item.completed .name {
   text-decoration: line-through;
   color: #999;
+}
+
+.item.darkMode.completed .name {
+  color: #666;
 }
 
 .backgroundImage {
@@ -39,11 +58,12 @@
   flex: 1;
   position: relative;
   z-index: 1;
+  padding-top: 50px;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 12px;
   gap: 10px;
@@ -57,9 +77,17 @@
   font-family: 'Pretendard Regular', sans-serif;
   flex: 1;
   text-align: left;
+  transition: color 0.3s ease;
+}
+
+.item.darkMode .name {
+  color: #e0e0e0;
 }
 
 .badge {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: inline-block;
   padding: 4px 12px;
   border-radius: 20px;
@@ -71,6 +99,7 @@
   background-color: #666;
   font-family: 'Mikodacs Custom', sans-serif;
   flex-shrink: 0;
+  z-index: 2;
 }
 
 /* Group color themes */
@@ -160,6 +189,14 @@
   color: #333;
 }
 
+.item.darkMode .keywordsToggle {
+  color: #aaa;
+}
+
+.item.darkMode .keywordsToggle:hover {
+  color: #e0e0e0;
+}
+
 .keywords {
   display: flex;
   flex-wrap: wrap;
@@ -176,6 +213,12 @@
   border-radius: 4px;
   font-size: 0.75em;
   color: #666;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.item.darkMode .keyword {
+  background-color: #333;
+  color: #aaa;
 }
 
 .cornerContainer {
@@ -199,7 +242,7 @@
   border-radius: 3px;
   min-width: 40px;
   text-align: center;
-  font-size: 0.7em;
+  font-size: 1.2em;
   z-index: 10;
 }
 
@@ -237,6 +280,20 @@
   transform: scale(1.05);
 }
 
+.item.darkMode .toggleButton {
+  border-color: rgba(100, 100, 100, 0.8);
+  background-color: rgba(30, 30, 30, 0.6);
+  background-image: url('/spider_projection_background.png');
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.item.darkMode .toggleButton:hover {
+  border-color: rgba(150, 150, 150, 1);
+  background-color: rgba(40, 40, 40, 0.7);
+  background-image: url('/spider_projection_background.png');
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+}
+
 .toggleButton:active {
   transform: scale(0.95);
 }
@@ -255,6 +312,12 @@
 
 .item.completed .toggleButton {
   background-color: rgba(75, 175, 80, 0.8);
+  background-image: url('/spider_projection_background.png');
+  border-color: #4CAF50;
+}
+
+.item.darkMode.completed .toggleButton {
+  background-color: rgba(40, 100, 50, 0.7);
   background-image: url('/spider_projection_background.png');
   border-color: #4CAF50;
 }

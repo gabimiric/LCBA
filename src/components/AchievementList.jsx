@@ -1,7 +1,7 @@
 import AchievementItem from './AchievementItem';
 import styles from '../styles/AchievementList.module.css';
 
-export default function AchievementList({ achievements, onToggle, onEdit, onDelete, baseAchievementIds }) {
+export default function AchievementList({ achievements, onToggle, onEdit, onDelete, baseAchievementIds, darkMode }) {
   return (
     <div className={styles.container}>
       <div className={styles.list}>
@@ -13,6 +13,7 @@ export default function AchievementList({ achievements, onToggle, onEdit, onDele
             onEdit={onEdit}
             onDelete={onDelete}
             isCustom={!baseAchievementIds?.includes(achievement.id)}
+            darkMode={darkMode}
           />
         ))}
       </div>

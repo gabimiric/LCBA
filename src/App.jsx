@@ -12,6 +12,27 @@ function App() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingAchievement, setEditingAchievement] = useState(null)
+  const [darkMode, setDarkMode] = useState(false)
+  const [backgroundImage, setBackgroundImage] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Select random background on mount
+  useEffect(() => {
+    const backgrounds = [
+      'S912.png',
+      'S933.png',
+      'S942_7.png',
+      'S949.png',
+      'story_9_laboratory.png',
+      'story_bulkhead_ev_v2.png',
+      'story_collapsed corridor.png',
+      'story_house_spiders_rooftop_ashes.png',
+      'story__command_broadcast_entrance.png',
+      'story__command_broadcast_hallway_close.png',
+    ]
+    const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)]
+    setBackgroundImage(`/backgrounds/${randomBg}`)
+  }, [])
 
   // Load achievements and restore completed state from localStorage
   useEffect(() => {
@@ -104,36 +125,79 @@ function App() {
   }, [])
 
   return (
-    <div className={styles.app}>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div>
-            <h1>Limbus Company Achievement Tracker</h1>
-            <p>Track your progress across all achievements</p>
+    <div 
+      className={`${styles.app} ${darkMode ? styles.darkMode : ''}`}
+      style={{
+        backgroundImage: `url('${backgroundImage}')`,
+      }}
+    >
+      <div className={styles.contentWrapper}>
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
+            <div className={styles.headerLeft}>
+              <img src="/lcba_logo.png" alt="LCBA Logo" className={styles.logo} />
+              <div className={styles.headerText}>
+                <h1 className={styles.title}>LIMBUS COMPANY BUS ADVERSITY</h1>
+                <p className={styles.description}>A Limbus Company Mirror Dungeon Achievement Tracker</p>
+              </div>
+            </div>
+            <div className={styles.headerRight}>
+              <button 
+                className={styles.addButton}
+                onClick={() => setModalOpen(true)}
+                title="Add Achievements"
+              >
+                +
+              </button>
+              <button 
+                className={styles.themeToggle}
+                onClick={() => setDarkMode(!darkMode)}
+                title={darkMode ? "Light mode" : "Dark mode"}
+              >
+                <img src={darkMode ? "/moon.svg" : "/sun.svg"} alt={darkMode ? "Moon" : "Sun"} />
+              </button>
+            </div>
           </div>
-          <button className={styles.addButton} onClick={() => setModalOpen(true)}>
-            + Add Achievements
+        </header>
+        <div className={styles.contentLayoutWrapper}>
+          <div className={styles.contentMain}>
+            <AchievementList 
+              achievements={filteredAchievements} 
+              onToggle={handleToggleAchievement}
+              onEdit={(ach) => {
+                setEditingAchievement(ach)
+                setEditModalOpen(true)
+              }}
+              onDelete={handleDeleteAchievement}
+              baseAchievementIds={achievementsData.map((a) => a.id)}
+              darkMode={darkMode}
+            />
+          </div>
+          <div className={`${styles.contentSidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`} onClick={(e) => e.stopPropagation()}>
+            {achievements.length > 0 && (
+              <FilterPanel achievements={achievements} onFilterChange={handleFilterChange} darkMode={darkMode} onClose={() => setSidebarOpen(false)} />
+            )}
+          </div>
+          <button 
+            className={`${styles.sidebarToggleButton} ${sidebarOpen ? styles.sidebarOpen : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSidebarOpen(!sidebarOpen);
+            }}
+            title="Toggle filters"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="10" cy="10" r="7" />
+              <line x1="17" y1="17" x2="24" y2="24" />
+            </svg>
           </button>
         </div>
-      </header>
-      {achievements.length > 0 && (
-        <FilterPanel achievements={achievements} onFilterChange={handleFilterChange} />
-      )}
-      <AchievementList 
-        achievements={filteredAchievements} 
-        onToggle={handleToggleAchievement}
-        onEdit={(ach) => {
-          setEditingAchievement(ach)
-          setEditModalOpen(true)
-        }}
-        onDelete={handleDeleteAchievement}
-        baseAchievementIds={achievementsData.map((a) => a.id)}
-      />
       <AddAchievementModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onAdd={handleAddAchievements}
         maxId={Math.max(...achievements.map((a) => a.id), 0)}
+        darkMode={darkMode}
       />
       {editingAchievement && (
         <EditAchievementModal
@@ -146,8 +210,10 @@ function App() {
           onDelete={handleDeleteAchievement}
           achievement={editingAchievement}
           isCustom={!achievementsData.some((a) => a.id === editingAchievement.id)}
+          darkMode={darkMode}
         />
       )}
+      </div>
     </div>
   )
 }

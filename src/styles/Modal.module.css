@@ -20,6 +20,13 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modalContent.darkMode {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
 .modalHeader {
@@ -28,12 +35,22 @@
   align-items: center;
   padding: 20px;
   border-bottom: 2px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.modalContent.darkMode .modalHeader {
+  border-bottom-color: #444;
 }
 
 .modalHeader h2 {
   margin: 0;
   font-size: 1.5em;
   color: #333;
+  transition: color 0.3s ease;
+}
+
+.modalContent.darkMode .modalHeader h2 {
+  color: #e0e0e0;
 }
 
 .closeButton {
@@ -47,6 +64,14 @@
 
 .closeButton:hover {
   color: #333;
+}
+
+.modalContent.darkMode .closeButton {
+  color: #aaa;
+}
+
+.modalContent.darkMode .closeButton:hover {
+  color: #e0e0e0;
 }
 
 .modalBody {
@@ -64,6 +89,11 @@
   font-size: 0.95em;
   color: #333;
   font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.modalContent.darkMode .section h3 {
+  color: #e0e0e0;
 }
 
 .jsonTextarea {
@@ -76,12 +106,26 @@
   font-size: 0.85em;
   resize: vertical;
   box-sizing: border-box;
+  background-color: white;
+  color: #333;
+  transition: all 0.3s ease;
 }
 
 .jsonTextarea:focus {
   outline: none;
   border-color: #666;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.modalContent.darkMode .jsonTextarea {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+.modalContent.darkMode .jsonTextarea:focus {
+  border-color: #888;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
 }
 
 .fileInput {
@@ -91,6 +135,15 @@
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
+  background-color: white;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.modalContent.darkMode .fileInput {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
 }
 
 .schema {
@@ -103,6 +156,13 @@
   color: #333;
   margin: 0;
   text-align: left;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.modalContent.darkMode .schema {
+  background-color: #333;
+  border-color: #555;
+  color: #e0e0e0;
 }
 
 .errorMessage {
@@ -112,6 +172,13 @@
   border-radius: 4px;
   border-left: 4px solid #c62828;
   font-size: 0.9em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modalContent.darkMode .errorMessage {
+  background-color: #4a1a1a;
+  color: #ff6b6b;
+  border-left-color: #ff6b6b;
 }
 
 .successMessage {
@@ -121,6 +188,13 @@
   border-radius: 4px;
   border-left: 4px solid #2e7d32;
   font-size: 0.9em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modalContent.darkMode .successMessage {
+  background-color: #1a4a1a;
+  color: #4caf50;
+  border-left-color: #4caf50;
 }
 
 .modalFooter {
@@ -129,6 +203,11 @@
   padding: 20px;
   border-top: 2px solid #ddd;
   justify-content: flex-end;
+  transition: border-color 0.3s ease;
+}
+
+.modalContent.darkMode .modalFooter {
+  border-top-color: #444;
 }
 
 .cancelButton,
@@ -151,6 +230,16 @@
 
 .cancelButton:hover {
   background-color: #eeeeee;
+}
+
+.modalContent.darkMode .cancelButton {
+  background-color: #444;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+.modalContent.darkMode .cancelButton:hover {
+  background-color: #555;
 }
 
 .submitButton {

@@ -8,6 +8,7 @@ export default function EditAchievementModal({
   onDelete,
   achievement,
   isCustom,
+  darkMode,
 }) {
   const [jsonText, setJsonText] = useState(
     JSON.stringify(achievement, null, 2)
@@ -63,7 +64,7 @@ export default function EditAchievementModal({
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <div className={`${styles.modalContent} ${darkMode ? styles.darkMode : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Edit Achievement</h2>
           <button className={styles.closeButton} onClick={onClose}>

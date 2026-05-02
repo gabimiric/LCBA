@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/AchievementItem.module.css';
 
-export default function AchievementItem({ achievement, onToggle, onEdit, onDelete, isCustom }) {
+export default function AchievementItem({ achievement, onToggle, onEdit, onDelete, isCustom, darkMode }) {
   const [keywordsExpanded, setKeywordsExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -14,7 +14,7 @@ export default function AchievementItem({ achievement, onToggle, onEdit, onDelet
   const projectionImage = isCompletionist ? '/banner_item.png' : (isHidden ? '/lunacy.png' : '/spider_projection.png');
 
   return (
-    <div className={`${styles.item} ${achievement.completed ? styles.completed : ''}`}>
+    <div className={`${styles.item} ${achievement.completed ? styles.completed : ''} ${darkMode ? styles.darkMode : ''}`}>
       <div className={styles.backgroundImage}></div>
       
       <div className={styles.content}>

@@ -47,7 +47,7 @@ function fuzzyMatch(searchTerm, text) {
   return false;
 }
 
-export default function FilterPanel({ achievements, onFilterChange }) {
+export default function FilterPanel({ achievements, onFilterChange, darkMode, onClose }) {
   const [selectedGroups, setSelectedGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [projectionRangeMin, setProjectionRangeMin] = useState(0);
@@ -145,9 +145,8 @@ export default function FilterPanel({ achievements, onFilterChange }) {
   };
 
   return (
-    <div className={styles.filterPanel}>
+    <div className={`${styles.filterPanel} ${darkMode ? styles.darkMode : ''}`}>
       <div className={styles.filterSection}>
-        <h3>Search</h3>
         <input
           type="text"
           placeholder="Search by name or keyword (fuzzy)..."
@@ -157,80 +156,89 @@ export default function FilterPanel({ achievements, onFilterChange }) {
         />
       </div>
 
-      <div className={styles.filterSection}>
-        <h3>Groups</h3>
-        <div className={styles.filterOptions}>
-          {groups.map((group) => (
-            <label key={group} className={styles.filterLabel}>
+      <div className={styles.filtersWrapper}>
+        <div className={styles.filterSection}>
+          <h3>Groups</h3>
+          <div className={styles.filterOptions}>
+            {groups.map((group) => (
+              <label key={group} className={styles.filterLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedGroups.includes(group)}
+                  onChange={() => handleGroupToggle(group)}
+                />
+                {group}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <h3>Projection Rate</h3>
+          <div className={styles.rangeContainer}>
+            <div className={styles.rangeRow}>
+              <label>Min:</label>
               <input
-                type="checkbox"
-                checked={selectedGroups.includes(group)}
-                onChange={() => handleGroupToggle(group)}
+                type="number"
+                min="0"
+                max={maxProjection}
+                value={projectionRangeMin}
+                onChange={(e) => setProjectionRangeMin(Number(e.target.value))}
+                className={styles.rangeInput}
               />
-              {group}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <h3>Projection Rate</h3>
-        <div className={styles.rangeContainer}>
-          <div className={styles.rangeRow}>
-            <label>Min:</label>
-            <input
-              type="number"
-              min="0"
-              max={maxProjection}
-              value={projectionRangeMin}
-              onChange={(e) => setProjectionRangeMin(Number(e.target.value))}
-              className={styles.rangeInput}
-            />
-          </div>
-          <div className={styles.rangeRow}>
-            <label>Max:</label>
-            <input
-              type="number"
-              min="0"
-              max={maxProjection}
-              value={projectionRangeMax}
-              onChange={(e) => setProjectionRangeMax(Number(e.target.value))}
-              className={styles.rangeInput}
-            />
+            </div>
+            <div className={styles.rangeRow}>
+              <label>Max:</label>
+              <input
+                type="number"
+                min="0"
+                max={maxProjection}
+                value={projectionRangeMax}
+                onChange={(e) => setProjectionRangeMax(Number(e.target.value))}
+                className={styles.rangeInput}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.filterSection}>
-        <h3>Completed Achievements</h3>
-        <select
-          value={completedFilter}
-          onChange={(e) => setCompletedFilter(e.target.value)}
-          className={styles.selectInput}
-        >
-          <option value="all">Show All</option>
-          <option value="first">Show First</option>
-          <option value="last">Show Last</option>
-          <option value="hide">Hide</option>
-        </select>
-      </div>
+        <div className={styles.filterSection}>
+          <h3>Completed Achievements</h3>
+          <select
+            value={completedFilter}
+            onChange={(e) => setCompletedFilter(e.target.value)}
+            className={styles.selectInput}
+          >
+            <option value="all">Show All</option>
+            <option value="first">Show First</option>
+            <option value="last">Show Last</option>
+            <option value="hide">Hide</option>
+          </select>
+        </div>
 
-      <div className={styles.filterSection}>
-        <h3>Sort By</h3>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className={styles.selectInput}
-        >
-          <option value="name">Name (A-Z)</option>
-          <option value="projectionAsc">Projection Rate (Low to High)</option>
-          <option value="projectionDesc">Projection Rate (High to Low)</option>
-        </select>
-      </div>
+        <div className={styles.filterSection}>
+          <h3>Sort By</h3>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className={styles.selectInput}
+          >
+            <option value="name">Name (A-Z)</option>
+            <option value="projectionAsc">Projection Rate (Low to High)</option>
+            <option value="projectionDesc">Projection Rate (High to Low)</option>
+          </select>
+        </div>
 
-      <button className={styles.clearButton} onClick={handleClearFilters}>
-        Clear All Filters
-      </button>
+        <div className={styles.buttonContainer}>
+          <button className={styles.clearButton} onClick={handleClearFilters}>
+            Clear All Filters
+          </button>
+          {onClose && (
+            <button className={styles.closeButton} onClick={onClose} title="Close filters">
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

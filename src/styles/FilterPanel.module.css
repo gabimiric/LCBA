@@ -1,37 +1,149 @@
 .filterPanel {
-  background: white;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 0 auto 30px auto;
-  max-width: 1200px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
   overflow: visible;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+}
+
+.filterPanel.darkMode {
+  background: transparent;
+  border-color: transparent;
+  color: #e0e0e0;
+  box-shadow: none;
 }
 
 .filterSection {
-  margin-bottom: 20px;
+  margin-bottom: 0;
   overflow: visible;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.filterPanel.darkMode .filterSection {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+.filterSection:first-of-type {
+  flex-shrink: 0;
+}
+
+.filtersWrapper .filterSection {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.filterPanel.darkMode .filtersWrapper .filterSection {
+  border-bottom-color: #444;
+}
+
+.filtersWrapper .filterSection:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.filtersWrapper {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+  overflow-y: auto;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.filterPanel.darkMode .filtersWrapper {
+  background: #2a2a2a;
+  border-color: #444;
 }
 
 .filterSection:last-of-type {
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .filterSection h3 {
   margin: 0 0 12px 0;
-  font-size: 1em;
+  font-size: 0.9em;
   color: #333;
   font-weight: 600;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filterPanel.darkMode .filterSection h3 {
+  color: #e0e0e0;
+}
+
+.filtersWrapper .filterSection h3 {
+  margin-bottom: 8px;
+}
+
+.filterSection {
+  margin-bottom: 0;
+  overflow: visible;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.filterPanel.darkMode .filterSection {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+.filterSection:first-of-type {
+  flex-shrink: 0;
+}
+
+.filterSection h3 {
+  margin: 0 0 12px 0;
+  font-size: 0.9em;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filterPanel.darkMode .filterSection h3 {
+  color: #e0e0e0;
+}
+
+.filtersWrapper .filterSection h3 {
+  margin-bottom: 8px;
 }
 
 .searchInput {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.95em;
+  font-size: 0.9em;
   box-sizing: border-box;
+  background-color: white;
+  color: #333;
+  transition: all 0.3s ease;
 }
 
 .searchInput:focus {
@@ -40,10 +152,21 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
+.filterPanel.darkMode .searchInput {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+.filterPanel.darkMode .searchInput:focus {
+  border-color: #888;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
 .filterOptions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
 .filterLabel {
@@ -51,7 +174,13 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 0.85em;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.filterPanel.darkMode .filterLabel {
+  color: #e0e0e0;
 }
 
 .filterLabel input[type='checkbox'] {
@@ -65,13 +194,14 @@
   padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.95em;
+  font-size: 0.9em;
   background-color: white;
   color: #333;
   cursor: pointer;
   box-sizing: border-box;
   position: relative;
   z-index: 100;
+  transition: all 0.3s ease;
 }
 
 .selectInput:focus {
@@ -80,29 +210,50 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
+.filterPanel.darkMode .selectInput {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+.filterPanel.darkMode .selectInput:focus {
+  border-color: #888;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
 .rangeContainer {
   display: flex;
-  gap: 16px;
+  gap: 12px;
+  width: 100%;
 }
 
 .rangeRow {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
 }
 
 .rangeRow label {
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: #666;
-  min-width: 35px;
+  min-width: 30px;
+  transition: color 0.3s ease;
+}
+
+.filterPanel.darkMode .rangeRow label {
+  color: #aaa;
 }
 
 .rangeInput {
-  width: 70px;
+  flex: 1;
   padding: 6px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.9em;
+  font-size: 0.85em;
+  background-color: white;
+  color: #333;
+  transition: all 0.3s ease;
 }
 
 .rangeInput:focus {
@@ -111,17 +262,28 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
+.filterPanel.darkMode .rangeInput {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+.filterPanel.darkMode .rangeInput:focus {
+  border-color: #888;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
 .clearButton {
-  width: 100%;
   padding: 10px 16px;
   background-color: #f44336;
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 0.95em;
+  font-size: 0.9em;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  flex: 1;
 }
 
 .clearButton:hover {
@@ -130,4 +292,68 @@
 
 .clearButton:active {
   transform: scale(0.98);
+}
+
+.filterPanel.darkMode .clearButton {
+  background-color: #c62828;
+}
+
+.filterPanel.darkMode .clearButton:hover {
+  background-color: #b71c1c;
+}
+
+.filtersWrapper .clearButton {
+  margin-top: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-top: auto;
+}
+
+.filtersWrapper .buttonContainer {
+  margin-top: 0;
+}
+
+.closeButton {
+  display: none;
+  padding: 10px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  background-color: #d32f2f;
+}
+
+.closeButton:active {
+  transform: scale(0.98);
+}
+
+.filterPanel.darkMode .closeButton {
+  background-color: #c62828;
+}
+
+.filterPanel.darkMode .closeButton:hover {
+  background-color: #b71c1c;
+}
+
+@media (max-width: 1024px) {
+  .closeButton {
+    display: flex;
+  }
+
+  .clearButton {
+    flex: 1;
+  }
 }
