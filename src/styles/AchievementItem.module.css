@@ -107,6 +107,41 @@
   background-color: #212121;
 }
 
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.editBtn,
+.deleteBtn {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.75em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editBtn {
+  background-color: #2196F3;
+  color: white;
+}
+
+.editBtn:hover {
+  background-color: #1976D2;
+}
+
+.deleteBtn {
+  background-color: #f44336;
+  color: white;
+}
+
+.deleteBtn:hover {
+  background-color: #d32f2f;
+}
+
 .keywordsToggle {
   background: none;
   border: none;

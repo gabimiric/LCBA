@@ -14,6 +14,13 @@
   margin-right: auto;
 }
 
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .header h1 {
   margin: 0;
   font-size: 2.5em;
@@ -25,4 +32,27 @@
   margin: 10px 0 0 0;
   font-size: 1.1em;
   color: #666;
+}
+
+.addButton {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-top: 5px;
+}
+
+.addButton:hover {
+  background-color: #1976D2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.addButton:active {
+  transform: scale(0.98);
 }

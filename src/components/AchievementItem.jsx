@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/AchievementItem.module.css';
 
-export default function AchievementItem({ achievement, onToggle }) {
+export default function AchievementItem({ achievement, onToggle, onEdit, onDelete, isCustom }) {
   const [keywordsExpanded, setKeywordsExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -9,7 +9,9 @@ export default function AchievementItem({ achievement, onToggle }) {
   };
 
   const isHidden = achievement.group === 'Hidden';
-  const projectionImage = isHidden ? '/lunacy.png' : '/spider_projection.png';
+  const isCompletionist = achievement.group === 'Completionist';
+  const hasProjection = achievement.projectionRate > 0;
+  const projectionImage = isCompletionist ? '/banner_item.png' : (isHidden ? '/lunacy.png' : '/spider_projection.png');
 
   return (
     <div className={`${styles.item} ${achievement.completed ? styles.completed : ''}`}>
@@ -22,6 +24,16 @@ export default function AchievementItem({ achievement, onToggle }) {
             {achievement.group}
           </span>
         </div>
+        {isCustom && (
+          <div className={styles.actions}>
+            <button className={styles.editBtn} onClick={() => onEdit(achievement)}>
+              Edit
+            </button>
+            <button className={styles.deleteBtn} onClick={() => onDelete(achievement.id)}>
+              Delete
+            </button>
+          </div>
+        )}
         <button
           className={styles.keywordsToggle}
           onClick={() => setKeywordsExpanded(!keywordsExpanded)}
@@ -39,24 +51,32 @@ export default function AchievementItem({ achievement, onToggle }) {
         )}
       </div>
 
-      <div className={styles.cornerContainer}>
-        <button
-          className={`${styles.toggleButton} ${achievement.completed ? styles.completedButton : ''}`}
-          onClick={handleToggle}
-          title={achievement.completed ? 'Mark as incomplete' : 'Mark as complete'}
-        >
-          <img 
-            src={projectionImage}
-            alt={isHidden ? 'Lunacy' : 'Projection'}
-            className={styles.projectionImage}
-          />
-          <div className={styles.xpDisplay}>
-            <span className={styles.xpValue}>
-              +{achievement.projectionRate}
-            </span>
-          </div>
-        </button>
-      </div>
+      {(hasProjection || isCustom || isCompletionist) && (
+        <div className={styles.cornerContainer}>
+          <button
+            className={`${styles.toggleButton} ${achievement.completed ? styles.completedButton : ''}`}
+            onClick={handleToggle}
+            title={achievement.completed ? 'Mark as incomplete' : 'Mark as complete'}
+          >
+            {!isCustom ? (
+              <>
+                <img 
+                  src={projectionImage}
+                  alt={isCompletionist ? 'Banner' : (isHidden ? 'Lunacy' : 'Projection')}
+                  className={styles.projectionImage}
+                />
+                {!isCompletionist && (
+                  <div className={styles.xpDisplay}>
+                    <span className={styles.xpValue}>
+                      +{achievement.projectionRate}
+                    </span>
+                  </div>
+                )}
+              </>
+            ) : null}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
