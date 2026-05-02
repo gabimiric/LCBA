@@ -1,0 +1,17 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}
