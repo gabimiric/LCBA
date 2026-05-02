@@ -1100,7 +1100,7 @@
   "name": "Unlock the EX-Tier E.G.O Gift \"A Certain Philosophy\" in the E.G.O Gift Compendium",
   "projectionRate": 10,
   "group": "Hidden",
-  "keywords": ["hidden", "ego_gift", "ex_tier", "philosophy"],
+  "keywords": ["hidden", "ego_gift", "ex_tier"],
   "completed": false
 },
 {
