@@ -12,7 +12,7 @@ function App() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingAchievement, setEditingAchievement] = useState(null)
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(true)
   const [backgroundImage, setBackgroundImage] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -31,7 +31,7 @@ function App() {
       'story__command_broadcast_hallway_close.png',
     ]
     const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)]
-    setBackgroundImage(`/backgrounds/${randomBg}`)
+    setBackgroundImage(`${import.meta.env.BASE_URL}backgrounds/${randomBg}`)
   }, [])
 
   // Load achievements and restore completed state from localStorage
@@ -135,7 +135,7 @@ function App() {
         <header className={styles.header}>
           <div className={styles.headerContent}>
             <div className={styles.headerLeft}>
-              <img src="/lcba_logo.png" alt="LCBA Logo" className={styles.logo} />
+              <img src={`${import.meta.env.BASE_URL}lcba_logo.png`} alt="LCBA Logo" className={styles.logo} />
               <div className={styles.headerText}>
                 <h1 className={styles.title}>LIMBUS COMPANY BUS ADVERSITY</h1>
                 <p className={styles.description}>A Limbus Company Mirror Dungeon Achievement Tracker</p>
@@ -154,7 +154,7 @@ function App() {
                 onClick={() => setDarkMode(!darkMode)}
                 title={darkMode ? "Light mode" : "Dark mode"}
               >
-                <img src={darkMode ? "/moon.svg" : "/sun.svg"} alt={darkMode ? "Moon" : "Sun"} />
+                <img src={darkMode ? `${import.meta.env.BASE_URL}moon.svg` : `${import.meta.env.BASE_URL}sun.svg`} alt={darkMode ? "Moon" : "Sun"} />
               </button>
             </div>
           </div>

@@ -11,7 +11,7 @@ export default function AchievementItem({ achievement, onToggle, onEdit, onDelet
   const isHidden = achievement.group === 'Hidden';
   const isCompletionist = achievement.group === 'Completionist';
   const hasProjection = achievement.projectionRate > 0;
-  const projectionImage = isCompletionist ? '/banner_item.png' : (isHidden ? '/lunacy.png' : '/spider_projection.png');
+  const projectionImage = isCompletionist ? `${import.meta.env.BASE_URL}banner_item.png` : (isHidden ? `${import.meta.env.BASE_URL}lunacy.png` : `${import.meta.env.BASE_URL}spider_projection.png`);
 
   return (
     <div className={`${styles.item} ${achievement.completed ? styles.completed : ''} ${darkMode ? styles.darkMode : ''}`}>
