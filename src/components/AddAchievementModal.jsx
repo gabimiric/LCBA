@@ -14,7 +14,7 @@ const EXAMPLE_ACHIEVEMENTS = [
   }
 ];
 
-export default function AddAchievementModal({ isOpen, onClose, onAdd, maxId, darkMode }) {
+export default function AddAchievementModal({ isOpen, onClose, onAdd, darkMode }) {
   const [jsonText, setJsonText] = useState(JSON.stringify(EXAMPLE_ACHIEVEMENTS, null, 2));
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -30,14 +30,14 @@ export default function AddAchievementModal({ isOpen, onClose, onAdd, maxId, dar
         const parsed = JSON.parse(content);
         setJsonText(JSON.stringify(parsed, null, 2));
         setError('');
-      } catch (err) {
+      } catch {
         setError('Invalid JSON file');
       }
     };
     reader.readAsText(file);
   };
 
-  const handleAddAchievements = () => {
+  const handleAddAchievements = async () => {
     setError('');
     setSuccess('');
 
@@ -58,16 +58,17 @@ export default function AddAchievementModal({ isOpen, onClose, onAdd, maxId, dar
         }
 
         return {
-          id: (ach.id || maxId + idx + 1),
+          id: ach.id,
           name: ach.name,
           projectionRate: ach.projectionRate ?? 0,
           group: ach.group || 'Custom',
           keywords: ach.keywords,
           completed: false,
+          source: 'custom',
         };
       });
 
-      onAdd(validated);
+      await onAdd(validated);
       setSuccess(`Added ${validated.length} achievement(s)!`);
       setTimeout(() => {
         onClose();

@@ -10,13 +10,11 @@ export default function EditAchievementModal({
   isCustom,
   darkMode,
 }) {
-  const [jsonText, setJsonText] = useState(
-    JSON.stringify(achievement, null, 2)
-  );
+  const [jsonText, setJsonText] = useState(JSON.stringify(achievement, null, 2));
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setError('');
     setSuccess('');
 
@@ -38,7 +36,7 @@ export default function EditAchievementModal({
         completed: achievement.completed,
       };
 
-      onUpdate(updated);
+      await onUpdate(updated);
       setSuccess('Achievement updated!');
       setTimeout(() => {
         onClose();
@@ -49,14 +47,18 @@ export default function EditAchievementModal({
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (
       window.confirm(
         `Are you sure you want to delete "${achievement.name}"?`
       )
     ) {
-      onDelete(achievement.id);
-      onClose();
+      try {
+        await onDelete(achievement.id);
+        onClose();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Delete failed');
+      }
     }
   };
 

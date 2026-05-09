@@ -3,21 +3,11 @@ import AchievementList from './components/AchievementList'
 import FilterPanel from './components/FilterPanel'
 import AddAchievementModal from './components/AddAchievementModal'
 import EditAchievementModal from './components/EditAchievementModal'
-import achievementsData from './data/achievements.json'
+import { achievementsApi } from './api/client'
 import styles from './styles/App.module.css'
 
 function App() {
-  const [achievements, setAchievements] = useState([])
-  const [filteredAchievements, setFilteredAchievements] = useState([])
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editModalOpen, setEditModalOpen] = useState(false)
-  const [editingAchievement, setEditingAchievement] = useState(null)
-  const [darkMode, setDarkMode] = useState(true)
-  const [backgroundImage, setBackgroundImage] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  // Select random background on mount
-  useEffect(() => {
+  const [backgroundImage] = useState(() => {
     const backgrounds = [
       'S912.png',
       'S933.png',
@@ -31,48 +21,86 @@ function App() {
       'story__command_broadcast_hallway_close.png',
     ]
     const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)]
-    setBackgroundImage(`${import.meta.env.BASE_URL}backgrounds/${randomBg}`)
+    return `${import.meta.env.BASE_URL}backgrounds/${randomBg}`
+  })
+  const [achievements, setAchievements] = useState([])
+  const [filteredAchievements, setFilteredAchievements] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [editingAchievement, setEditingAchievement] = useState(null)
+  const [darkMode, setDarkMode] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const refreshAchievements = useCallback(async () => {
+    setError('')
+    setLoading(true)
+    try {
+      const loaded = await achievementsApi.listAll(250)
+      setAchievements(loaded)
+      setFilteredAchievements(loaded)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load achievements')
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
-  // Load achievements and restore completed state from localStorage
   useEffect(() => {
-    const savedCompletedIds = localStorage.getItem('completedAchievements')
-    const completedIds = savedCompletedIds ? JSON.parse(savedCompletedIds) : []
+    let cancelled = false
 
-    // Load custom achievements
-    const savedCustomAchievements = localStorage.getItem('customAchievements')
-    const customAchievements = savedCustomAchievements ? JSON.parse(savedCustomAchievements) : []
+    const loadInitialAchievements = async () => {
+      setError('')
+      try {
+        const loaded = await achievementsApi.listAll(250)
+        if (cancelled) {
+          return
+        }
 
-    // Combine base achievements with custom ones
-    const allAchievements = [...achievementsData, ...customAchievements]
+        setAchievements(loaded)
+        setFilteredAchievements(loaded)
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load achievements')
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
+    }
 
-    const loaded = allAchievements.map((achievement) => ({
-      ...achievement,
-      completed: completedIds.includes(achievement.id),
-    }))
+    loadInitialAchievements()
 
-    setAchievements(loaded)
-    setFilteredAchievements(loaded)
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   // Handle achievement toggle
-  const handleToggleAchievement = useCallback((id) => {
-    setAchievements((prev) => {
-      const updated = prev.map((achievement) =>
-        achievement.id === id
-          ? { ...achievement, completed: !achievement.completed }
-          : achievement
+  const handleToggleAchievement = useCallback(async (id) => {
+    const current = achievements.find((achievement) => achievement.id === id)
+    if (!current) {
+      return
+    }
+
+    setError('')
+    try {
+      const updated = await achievementsApi.update(id, {
+        completed: !current.completed,
+      })
+
+      setAchievements((prev) =>
+        prev.map((achievement) => (achievement.id === id ? updated : achievement))
       )
-
-      // Save completed state to localStorage
-      const completedIds = updated
-        .filter((achievement) => achievement.completed)
-        .map((achievement) => achievement.id)
-      localStorage.setItem('completedAchievements', JSON.stringify(completedIds))
-
-      return updated
-    })
-  }, [])
+      setFilteredAchievements((prev) =>
+        prev.map((achievement) => (achievement.id === id ? updated : achievement))
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update achievement')
+    }
+  }, [achievements])
 
   // Handle filter changes
   const handleFilterChange = useCallback((filtered) => {
@@ -80,48 +108,59 @@ function App() {
   }, [])
 
   // Handle adding custom achievements
-  const handleAddAchievements = useCallback((newAchievements) => {
-    setAchievements((prev) => {
-      const updated = [...prev, ...newAchievements]
-      
-      // Save custom achievements to localStorage
-      const customAchievements = updated.filter(
-        (ach) => !achievementsData.some((base) => base.id === ach.id)
+  const handleAddAchievements = useCallback(async (newAchievements) => {
+    setError('')
+    try {
+      await Promise.all(
+        newAchievements.map((achievement) => {
+          return achievementsApi.create({
+            ...achievement,
+            source: 'custom',
+          })
+        })
       )
-      localStorage.setItem('customAchievements', JSON.stringify(customAchievements))
-      
-      return updated
-    })
-  }, [])
+      await refreshAchievements()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add achievements')
+      throw err
+    }
+  }, [refreshAchievements])
 
   // Handle updating custom achievement
-  const handleUpdateAchievement = useCallback((updated) => {
-    setAchievements((prev) => {
-      const result = prev.map((ach) => (ach.id === updated.id ? updated : ach))
-      
-      // Save custom achievements to localStorage
-      const customAchievements = result.filter(
-        (ach) => !achievementsData.some((base) => base.id === ach.id)
+  const handleUpdateAchievement = useCallback(async (updated) => {
+    setError('')
+    try {
+      const saved = await achievementsApi.update(updated.id, {
+        name: updated.name,
+        projectionRate: updated.projectionRate,
+        group: updated.group,
+        keywords: updated.keywords,
+        source: updated.source,
+      })
+
+      setAchievements((prev) =>
+        prev.map((achievement) => (achievement.id === saved.id ? saved : achievement))
       )
-      localStorage.setItem('customAchievements', JSON.stringify(customAchievements))
-      
-      return result
-    })
+      setFilteredAchievements((prev) =>
+        prev.map((achievement) => (achievement.id === saved.id ? saved : achievement))
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update achievement')
+      throw err
+    }
   }, [])
 
   // Handle deleting custom achievement
-  const handleDeleteAchievement = useCallback((id) => {
-    setAchievements((prev) => {
-      const result = prev.filter((ach) => ach.id !== id)
-      
-      // Save custom achievements to localStorage
-      const customAchievements = result.filter(
-        (ach) => !achievementsData.some((base) => base.id === ach.id)
-      )
-      localStorage.setItem('customAchievements', JSON.stringify(customAchievements))
-      
-      return result
-    })
+  const handleDeleteAchievement = useCallback(async (id) => {
+    setError('')
+    try {
+      await achievementsApi.remove(id)
+      setAchievements((prev) => prev.filter((achievement) => achievement.id !== id))
+      setFilteredAchievements((prev) => prev.filter((achievement) => achievement.id !== id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete achievement')
+      throw err
+    }
   }, [])
 
   return (
@@ -161,6 +200,8 @@ function App() {
         </header>
         <div className={styles.contentLayoutWrapper}>
           <div className={styles.contentMain}>
+            {error && <p style={{ color: '#ff8080' }}>{error}</p>}
+            {loading && <p>Loading achievements...</p>}
             <AchievementList 
               achievements={filteredAchievements} 
               onToggle={handleToggleAchievement}
@@ -169,7 +210,6 @@ function App() {
                 setEditModalOpen(true)
               }}
               onDelete={handleDeleteAchievement}
-              baseAchievementIds={achievementsData.map((a) => a.id)}
               darkMode={darkMode}
             />
           </div>
@@ -196,11 +236,11 @@ function App() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onAdd={handleAddAchievements}
-        maxId={Math.max(...achievements.map((a) => a.id), 0)}
         darkMode={darkMode}
       />
       {editingAchievement && (
         <EditAchievementModal
+          key={editingAchievement.id}
           isOpen={editModalOpen}
           onClose={() => {
             setEditModalOpen(false)
@@ -209,7 +249,7 @@ function App() {
           onUpdate={handleUpdateAchievement}
           onDelete={handleDeleteAchievement}
           achievement={editingAchievement}
-          isCustom={!achievementsData.some((a) => a.id === editingAchievement.id)}
+          isCustom={editingAchievement.source === 'custom'}
           darkMode={darkMode}
         />
       )}
