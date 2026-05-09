@@ -1,81 +1,83 @@
 # LIMBUS COMPANY BUS ADVERSITY DEPARTMENT
 
-An achievement tracker for the Mirror Dungeon in **Limbus Company**. This web app was created as a project for my web development course.
+Achievement tracker for Mirror Dungeon in Limbus Company.
 
-## Features
+## Lab 7 Back-end Additions
 
-### Achievement Tracking
-- Track your achievements on your browser's local storage (persisted across sessions)
-- Manually mark achievements as completed
-- Includes every achievement from the current Mirror Dungeon (Mirror of Names and Spiders)
-- Regular updates planned with each new batch of achievements
+This project now includes a JWT-protected CRUD API and front-end integration.
 
-### Custom Achievements
-- Add your own custom achievements through simple JSON entry or file import
-- Edit and delete custom achievements at any time
-- Custom achievements are saved locally in your browser
+### Implemented Requirements
 
-### User Interface
-- **Dark/Light Mode Toggle**: Switch between themes to match your preference
-- **Advanced Filtering**: 
-  - Filter by achievement group/category
-  - Filter by projection rate
-  - View completed vs. incomplete achievements
-  - Multiple sort options (alphabetical, completion rate, etc.)
-- **Search Functionality**: Quickly find specific achievements by name
+- CRUD API for achievements (REST)
+- `/api/token` endpoint for issuing JWTs
+- JWT with role/permissions payload and 1 minute expiration
+- Authorization middleware for protected routes
+- Role and permission model:
+  - `ADMIN`: `READ`, `WRITE`, `DELETE`
+  - `WRITER`: `READ`, `WRITE`
+  - `VISITOR`: `READ`
+- Pagination on list endpoint using `limit` and `offset`
+- Swagger documentation available in browser
+- Front-end connected to back-end API
 
-### Data Management
-- All data saved locally in browser storage (no server required)
-- No account or login needed
-- Your progress is tied to your browser/device
-- Easy import/export capabilities for custom achievements
+## API Overview
 
-## Technical Stack
+Base URL (development): `http://localhost:3001/api`
 
-**Built With:**
-- React 18 - UI framework
-- Vite - Build tool and dev server
-- CSS Modules - Scoped styling system
-- ES6+ JavaScript
+### Auth
 
-**Design Technologies:**
-- Responsive CSS with media queries
-- Flexbox and CSS Grid layouts
-- CSS backdrop filters for visual effects
+- `POST /api/token`
+  - Body example:
+    ```json
+    {
+      "role": "ADMIN"
+    }
+    ```
+- `GET /api/token?role=VISITOR`
+- `GET /api/token?permissions=READ,WRITE`
 
-## Storage Information
+### Achievements (JWT required)
 
-**Note:** Since Limbus Company doesn't provide direct API access to achievement data, this tracker requires manual marking of completed achievements. I don't have a way to automatically sync with your in-game progress.
+- `GET /api/achievements?limit=50&offset=0`
+- `GET /api/achievements/:id`
+- `POST /api/achievements`
+- `PUT /api/achievements/:id`
+- `DELETE /api/achievements/:id`
 
-All data is stored locally in your browser:
-- Completed achievement status
-- Custom achievements
-- Theme preference (dark/light mode)
+## Swagger
 
-## Tools & Resources Used
+- Swagger UI: `http://localhost:3001/api/docs`
+- OpenAPI JSON: `http://localhost:3001/api/docs.json`
 
-**Development:**
-- GitHub Copilot - AI assistance for code development and optimization
-- VS Code - Code editor
-- Node.js & npm - Package management
+## Run Locally
 
-**Design & Assets:**
-- Custom fonts: Mikodacs (title), Pretendard (content)
-- Background images from Limbus Company assets
-- SVG icons for UI elements
+Install dependencies:
 
-## AI Disclaimer
+```bash
+npm install
+```
 
-This project was developed with assistance from **GitHub Copilot**, an AI-powered code completion and generation tool. Copilot was used to:
-- Generate component code and boilerplate
-- Optimize CSS and responsive design patterns
-- Assist with state management logic
-- Suggest improvements to code structure
+Run API server only:
 
-While AI assistance was utilized, all core functionality, design decisions, and project architecture were directed and validated by the developer.
+```bash
+npm run dev:api
+```
 
-## Notes
+Run front-end only:
 
-- I will try my best to update it with each new batch of achievements
-- This tracker is fan-made and not affiliated with Project Moon
-- Data is stored locally: clearing your browser data will reset your progress!!!
+```bash
+npm run dev
+```
+
+Run API + front-end together:
+
+```bash
+npm run dev:all
+```
+
+## Tech Stack
+
+- React + Vite
+- Express
+- JSON Web Token (`jsonwebtoken`)
+- Swagger UI (`swagger-ui-express`)
